@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 
+const val NOTIFY_PAUSE = "NOTIFY_PAUSE"
+const val NOTIFY_RESUME = "NOTIFY_RESUME"
 const val NOTIFY_STOP = "NOTIFY_STOP"
 const val NOTIFY_NEXT = "NOTIFY_NEXT"
 const val NOTIFY_PREVIOUS = "NOTIFY_PREVIOUS"
@@ -15,6 +17,8 @@ const val PARAM_SONG_LIST = "PARAM_SONG_LIST"
 const val PARAM_PLAY_INDEX = "PARAM_PLAY_INDEX"
 
 class MusicService : Service() {
+
+    private var playerFocusHelper: AudioFocusHelper? = null
 
     lateinit var songList : ArrayList<Song>
     var currentIndex = 0
@@ -53,25 +57,24 @@ class MusicService : Service() {
 
     fun initService(){
         player.play(this, getSong())
+        playerFocusHelper = AudioFocusHelper(this)
+        playerFocusHelper!!.requestAudioFocus()
     }
 
     fun next(){
         currentIndex++
         fixCurrentIndex()
-        Log.e("CURRENT INDEX", "$currentIndex")
         player.play(this, getSong())
     }
 
     fun prev(){
         currentIndex--
         fixCurrentIndex()
-        Log.e("CURRENT INDEX", "$currentIndex")
         player.play(this, getSong())
     }
 
     fun goToIndex(){
         fixCurrentIndex()
-        Log.e("CURRENT INDEX", "$currentIndex")
         player.play(this, getSong())
     }
 
@@ -90,6 +93,7 @@ class MusicService : Service() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         player.stop(this)
+        playerFocusHelper?.abandonAudioFocus()
         return super.onUnbind(intent)
     }
 }

@@ -4,6 +4,8 @@ import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
 import java.io.IOException
+import android.media.AudioAttributes
+import android.os.Build
 
 
 class Player {
@@ -24,7 +26,17 @@ class Player {
         isPrepared = false
         mediaPlayer = MediaPlayer()
 
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val attr= AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+
+            mediaPlayer.setAudioAttributes(attr)
+        } else {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        }
+
+
         try{
             mediaPlayer.setDataSource(song.streamLink)
             mediaPlayer.prepareAsync()
