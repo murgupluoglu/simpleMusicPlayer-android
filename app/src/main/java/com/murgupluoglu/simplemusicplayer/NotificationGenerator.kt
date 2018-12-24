@@ -23,7 +23,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
     private var manager: NotificationManager? = null
     private var channel: NotificationChannel? = null
 
-    private val channelId = "com.emrahgunduz.notificationdemo"
+    private val channelId = "com.murgupluoglu.notificationdemo"
     private val channelName = "Test notification"
 
     private val title = "Music Player"
@@ -33,7 +33,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
     lateinit var notificationTargetBig : NotificationTarget
 
 
-    fun showNotification(context: Context, songTitle: String = "Song Title", artistName: String = "Artist Name", albumName: String = "Album Name", albumLink : String) {
+    fun getNotification(context: Context, songTitle: String = "Song Title", artistName: String = "Artist Name", albumName: String = "Album Name", albumLink : String) : Notification {
 
         // Using RemoteViews to bind custom layouts into Notification
         val smallView = RemoteViews(context.packageName, R.layout.status_bar)
@@ -84,7 +84,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         // Notification through notification manager
         notification.flags = Notification.FLAG_ONGOING_EVENT or Notification.FLAG_ONLY_ALERT_ONCE
 
-        manager?.notify(NOTIFICATION_ID, notification)
+        return notification
     }
 
     private fun loadArtistImage(context: Context, artistLink : String){
@@ -108,6 +108,11 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
     fun cancelNotification(context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(NOTIFICATION_ID)
+    }
+
+    fun updateNotification(context: Context, notification : Notification) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
 

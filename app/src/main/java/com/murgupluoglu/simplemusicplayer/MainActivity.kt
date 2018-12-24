@@ -8,8 +8,11 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
+
+    private var playerFocusHelper: AudioFocusHelper? = null
 
     val serviceConnection = object : ServiceConnection{
         override fun onServiceDisconnected(p0: ComponentName?) {
@@ -27,7 +30,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //TODO("Add audio focus listener")
+        playerFocusHelper = AudioFocusHelper(this)
+        playerFocusHelper!!.requestAudioFocus()
+
 
         songList.add(Song("http://37.247.98.16/;", "https://cdn.weber.emrg.me/Radio/be59e071-4eef-4f00-ad1a-67af0ca6cd28.png", "PowerTurk"))
         songList.add(Song("http://46.20.7.126/;stream.mp3", "https://cdn.weber.emrg.me/Radio/d27cd91a-9c7e-451f-a3f3-a6002ca1a01f.png", "Best Fm"))
@@ -40,41 +45,43 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(PARAM_SONG_LIST, songList)
         intent.putExtra(PARAM_PLAY_INDEX, 0)
         intent.action = START_SERVICE
-        startService(intent)
+        ContextCompat.startForegroundService(this, intent)
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     fun nextSong(view : View){
-        val serviceIntent = Intent(this, MusicService::class.java)
-        serviceIntent.action = NOTIFY_NEXT
-        startService(serviceIntent)
+        sendIntent(NOTIFY_NEXT)
     }
 
     fun prevSong(view : View){
-        val serviceIntent = Intent(this, MusicService::class.java)
-        serviceIntent.action = NOTIFY_PREVIOUS
-        startService(serviceIntent)
+        sendIntent(NOTIFY_PREVIOUS)
     }
 
     fun goToIndex(view : View){
         val serviceIntent = Intent(this, MusicService::class.java)
         serviceIntent.action = NOTIFY_GO_TO_INDEX
         intent.putExtra(PARAM_PLAY_INDEX, 1)
-        startService(serviceIntent)
+        ContextCompat.startForegroundService(this, serviceIntent)
     }
 
     fun stopSong(view : View){
+        sendIntent(NOTIFY_STOP)
+    }
+
+    fun sendIntent(action : String){
         val serviceIntent = Intent(this, MusicService::class.java)
-        serviceIntent.action = NOTIFY_STOP
-        startService(serviceIntent)
+        serviceIntent.action = action
+        ContextCompat.startForegroundService(this, serviceIntent)
     }
 
     fun disconnectService(){
         unbindService(serviceConnection)
+        playerFocusHelper?.abandonAudioFocus()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         disconnectService()
+
     }
 }

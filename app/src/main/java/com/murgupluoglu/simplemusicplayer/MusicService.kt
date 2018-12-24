@@ -3,7 +3,6 @@ package com.murgupluoglu.simplemusicplayer
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 
 const val NOTIFY_PAUSE = "NOTIFY_PAUSE"
 const val NOTIFY_RESUME = "NOTIFY_RESUME"
@@ -18,7 +17,7 @@ const val PARAM_PLAY_INDEX = "PARAM_PLAY_INDEX"
 
 class MusicService : Service() {
 
-    private var playerFocusHelper: AudioFocusHelper? = null
+    var notificationGenerator: NotificationGenerator = NotificationGenerator(MainActivity::class.java)
 
     lateinit var songList : ArrayList<Song>
     var currentIndex = 0
@@ -35,7 +34,7 @@ class MusicService : Service() {
                 START_SERVICE   -> {
                     songList = intent.getParcelableArrayListExtra<Song>(PARAM_SONG_LIST)
                     currentIndex = intent.getIntExtra(PARAM_PLAY_INDEX, 0)
-                    initService()
+                    startService()
                 }
                 NOTIFY_PREVIOUS -> {
                     prev()
@@ -55,31 +54,39 @@ class MusicService : Service() {
         return START_NOT_STICKY
     }
 
-    fun initService(){
-        player.play(this, getSong())
-        playerFocusHelper = AudioFocusHelper(this)
-        playerFocusHelper!!.requestAudioFocus()
+    fun startService(){
+        val song = getSong()
+        startForeground(NOTIFICATION_ID, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink))
+
+        play()
     }
 
     fun next(){
         currentIndex++
         fixCurrentIndex()
-        player.play(this, getSong())
+        play()
+    }
+
+    fun play(){
+        val song = getSong()
+        player.play(song)
+        notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink))
     }
 
     fun prev(){
         currentIndex--
         fixCurrentIndex()
-        player.play(this, getSong())
+        play()
     }
 
     fun goToIndex(){
         fixCurrentIndex()
-        player.play(this, getSong())
+        play()
     }
 
     fun stop(){
-        player.stop(this)
+        player.stop()
+        stopForeground(true)
     }
 
     fun getSong() : Song{
@@ -92,8 +99,7 @@ class MusicService : Service() {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        player.stop(this)
-        playerFocusHelper?.abandonAudioFocus()
+        stop()
         return super.onUnbind(intent)
     }
 }

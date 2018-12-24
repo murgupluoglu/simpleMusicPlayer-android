@@ -3,7 +3,6 @@ package com.murgupluoglu.simplemusicplayer
 import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
-import java.io.IOException
 import android.media.AudioAttributes
 import android.os.Build
 
@@ -13,12 +12,8 @@ class Player {
     var isPrepared = false
     var mediaPlayer = MediaPlayer()
 
-    var notificationGenerator: NotificationGenerator = NotificationGenerator(MainActivity::class.java)
 
-    fun play(context: Context, song: Song){
-
-        notificationGenerator.showNotification(context, song.title, "", "", song.imageLink)
-
+    fun play(song: Song){
         mediaPlayer.stop()
         mediaPlayer.reset()
         mediaPlayer.release()
@@ -48,17 +43,16 @@ class Player {
                 isPrepared = false
                 false
             }
-        }catch (e : IOException){
+        }catch (e : Exception){
             e.printStackTrace()
         }
 
     }
 
-    fun stop(context: Context){
+    fun stop(){
         if(isPrepared && mediaPlayer.isPlaying){
             mediaPlayer.stop()
             mediaPlayer.reset()
         }
-        notificationGenerator.cancelNotification(context)
     }
 }
