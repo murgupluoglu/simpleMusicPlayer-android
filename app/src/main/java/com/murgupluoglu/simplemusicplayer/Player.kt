@@ -1,9 +1,8 @@
 package com.murgupluoglu.simplemusicplayer
 
-import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.AudioAttributes
 import android.os.Build
 
 
@@ -33,7 +32,7 @@ class Player {
 
 
         try{
-            mediaPlayer.setDataSource(song.streamLink)
+            mediaPlayer.setDataSource(song.streamLink.trim())
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener { mp ->
                 isPrepared = true
