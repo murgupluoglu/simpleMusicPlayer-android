@@ -1,11 +1,7 @@
 package com.murgupluoglu.simplemusicplayer
 
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,16 +9,6 @@ import androidx.core.content.ContextCompat
 class MainActivity : AppCompatActivity() {
 
     private var playerFocusHelper: AudioFocusHelper? = null
-
-    val serviceConnection = object : ServiceConnection{
-        override fun onServiceDisconnected(p0: ComponentName?) {
-
-        }
-
-        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-
-        }
-    }
 
     val songList = arrayListOf<Song>()
 
@@ -46,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(PARAM_PLAY_INDEX, 0)
         intent.action = START_SERVICE
         ContextCompat.startForegroundService(this, intent)
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     fun nextSong(view : View){
@@ -75,13 +60,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun disconnectService(){
-        unbindService(serviceConnection)
+        sendIntent(NOTIFY_STOP)
         playerFocusHelper?.abandonAudioFocus()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         disconnectService()
-
     }
 }

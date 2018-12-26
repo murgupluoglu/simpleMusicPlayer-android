@@ -86,7 +86,7 @@ class MusicService : Service() {
 
     fun stop(){
         player.stop()
-        stopForeground(true)
+        stopSelf()
     }
 
     fun getSong() : Song{
