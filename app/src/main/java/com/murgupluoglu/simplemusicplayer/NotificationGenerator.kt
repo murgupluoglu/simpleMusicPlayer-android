@@ -33,7 +33,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
     lateinit var notificationTargetBig : NotificationTarget
 
 
-    fun getNotification(context: Context, songTitle: String = "Song Title", artistName: String = "Artist Name", albumName: String = "Album Name", albumLink : String) : Notification {
+    fun getNotification(context: Context, songTitle: String = "Song Title", artistName: String = "Artist Name", albumName: String = "Album Name", albumLink : String, isPlaying : Boolean = false) : Notification {
 
         // Using RemoteViews to bind custom layouts into Notification
         val smallView = RemoteViews(context.packageName, R.layout.status_bar)
@@ -43,7 +43,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         // showing default album image
         smallView.setImageViewBitmap(R.id.status_bar_icon, BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
         bigView.setImageViewBitmap(R.id.status_bar_album_art, BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-        setListeners(bigView, smallView, context, songTitle, artistName, albumName)
+        setListeners(bigView, smallView, context, songTitle, artistName, albumName, isPlaying)
 
         // Build the content of the notification
         val nBuilder = getNotificationBuilder(context,
@@ -116,19 +116,31 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
     }
 
 
-    private fun setListeners(bigView: RemoteViews, smallView: RemoteViews, context: Context, songTitle: String, artistName: String, albumName: String) {
+    private fun setListeners(bigView: RemoteViews, smallView: RemoteViews, context: Context, songTitle: String, artistName: String, albumName: String, isPlaying: Boolean) {
 
-        bigView.setOnClickPendingIntent(R.id.status_bar_prev, createPendingIntent(context, NOTIFY_PREVIOUS))
-        smallView.setOnClickPendingIntent(R.id.status_bar_prev, createPendingIntent(context, NOTIFY_PREVIOUS))
+        bigView.setOnClickPendingIntent(R.id.status_bar_prev, createPendingIntent(context, Status.Previous))
+        smallView.setOnClickPendingIntent(R.id.status_bar_prev, createPendingIntent(context, Status.Previous))
 
         //bigView.setOnClickPendingIntent(R.id.status_bar_collapse, createPendingIntent(context, NOTIFY_STOP))
         //smallView.setOnClickPendingIntent(R.id.status_bar_collapse, createPendingIntent(context, NOTIFY_STOP))
 
-        bigView.setOnClickPendingIntent(R.id.status_bar_next, createPendingIntent(context, NOTIFY_NEXT))
-        smallView.setOnClickPendingIntent(R.id.status_bar_next, createPendingIntent(context, NOTIFY_NEXT))
+        bigView.setOnClickPendingIntent(R.id.status_bar_next, createPendingIntent(context, Status.Next))
+        smallView.setOnClickPendingIntent(R.id.status_bar_next, createPendingIntent(context, Status.Next))
 
-        bigView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, NOTIFY_STOP))
-        smallView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, NOTIFY_STOP))
+
+        if(isPlaying){
+            bigView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_pause)
+            smallView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_pause)
+
+            bigView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, Status.Pause))
+            smallView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, Status.Pause))
+        }else{
+            bigView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_play)
+            smallView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_play)
+
+            bigView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, Status.Resume))
+            smallView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, Status.Resume))
+        }
 
         bigView.setTextViewText(R.id.status_bar_track_name, songTitle)
         smallView.setTextViewText(R.id.status_bar_track_name, songTitle)

@@ -54,4 +54,16 @@ class Player {
             mediaPlayer.reset()
         }
     }
+
+    fun pause(){
+        if(isPrepared && mediaPlayer.isPlaying){
+            mediaPlayer.pause()
+        }
+    }
+
+    fun resume(){
+        if(isPrepared && !mediaPlayer.isPlaying){
+            mediaPlayer.start()
+        }
+    }
 }

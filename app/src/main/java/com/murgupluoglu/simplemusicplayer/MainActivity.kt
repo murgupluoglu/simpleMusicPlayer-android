@@ -8,49 +8,43 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private var playerFocusHelper: AudioFocusHelper? = null
-
     val songList = arrayListOf<Song>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        playerFocusHelper = AudioFocusHelper(this)
-        playerFocusHelper!!.requestAudioFocus()
-
-
-        songList.add(Song("http://37.247.98.16/;", "https://cdn.weber.emrg.me/Radio/be59e071-4eef-4f00-ad1a-67af0ca6cd28.png", "PowerTurk"))
-        songList.add(Song("http://46.20.7.126/;stream.mp3", "https://cdn.weber.emrg.me/Radio/d27cd91a-9c7e-451f-a3f3-a6002ca1a01f.png", "Best Fm"))
-        songList.add(Song("http://46.20.3.204/;", "https://cdn.weber.emrg.me/Radio/e86c5632-8844-4a1e-bec9-d4681575d46b.png", "Kral Fm"))
-        songList.add(Song("http://radyo.dogannet.tv/slowturk", "https://cdn.weber.emrg.me/Radio/dc7b965a-fd0c-4233-b166-9fd22fb51dff.png", "Slow Türk"))
+        songList.add(Song("http://46.20.7.126/;stream.mp3", "https://pbs.twimg.com/profile_images/684004364927811585/yoDiKjFL.png", "Best Fm"))
+        songList.add(Song("http://37.247.98.16/;", "https://cdn.powergroup.com.tr/powerapp/channels/big/powerTurk.png", "PowerTurk"))
+        songList.add(Song("http://46.20.3.204/;", "https://cdn1.kralmuzik.com.tr/media/content/19-05/17/kralfm.png", "Kral Fm"))
+        songList.add(Song("http://radyo.dogannet.tv/slowturk", "https://www.canliradyodinle.fm/wp-content/uploads/radyo-slow-turk.jpg", "Slow Türk"))
     }
 
     fun startSong(view : View){
         val intent = Intent(this, MusicService::class.java)
         intent.putExtra(PARAM_SONG_LIST, songList)
         intent.putExtra(PARAM_PLAY_INDEX, 0)
-        intent.action = START_SERVICE
+        intent.action = Status.Start
         ContextCompat.startForegroundService(this, intent)
     }
 
     fun nextSong(view : View){
-        sendIntent(NOTIFY_NEXT)
+        sendIntent(Status.Next)
     }
 
     fun prevSong(view : View){
-        sendIntent(NOTIFY_PREVIOUS)
+        sendIntent(Status.Previous)
     }
 
     fun goToIndex(view : View){
         val serviceIntent = Intent(this, MusicService::class.java)
-        serviceIntent.action = NOTIFY_GO_TO_INDEX
+        serviceIntent.action = Status.GoToIndex
         intent.putExtra(PARAM_PLAY_INDEX, 1)
         ContextCompat.startForegroundService(this, serviceIntent)
     }
 
     fun stopSong(view : View){
-        sendIntent(NOTIFY_STOP)
+        sendIntent(Status.Stop)
     }
 
     fun sendIntent(action : String){
@@ -60,8 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun disconnectService(){
-        sendIntent(NOTIFY_STOP)
-        playerFocusHelper?.abandonAudioFocus()
+        sendIntent(Status.Stop)
     }
 
     override fun onDestroy() {

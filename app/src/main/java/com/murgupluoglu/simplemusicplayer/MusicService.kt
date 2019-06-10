@@ -4,22 +4,25 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
-const val NOTIFY_PAUSE = "NOTIFY_PAUSE"
-const val NOTIFY_RESUME = "NOTIFY_RESUME"
-const val NOTIFY_STOP = "NOTIFY_STOP"
-const val NOTIFY_NEXT = "NOTIFY_NEXT"
-const val NOTIFY_PREVIOUS = "NOTIFY_PREVIOUS"
-const val START_SERVICE = "START_SERVICE"
-const val NOTIFY_GO_TO_INDEX = "NOTIFY_GO_TO_INDEX"
+object Status{
+    const val Pause = "NOTIFY_PAUSE"
+    const val Resume = "NOTIFY_RESUME"
+    const val Stop = "NOTIFY_STOP"
+    const val Next = "NOTIFY_NEXT"
+    const val Previous = "NOTIFY_PREVIOUS"
+    const val Start = "START_SERVICE"
+    const val GoToIndex = "NOTIFY_GO_TO_INDEX"
+}
 
 const val PARAM_SONG_LIST = "PARAM_SONG_LIST"
 const val PARAM_PLAY_INDEX = "PARAM_PLAY_INDEX"
 
 class MusicService : Service() {
 
+    var playerFocusHelper: AudioFocusHelper? = null
     var notificationGenerator: NotificationGenerator = NotificationGenerator(MainActivity::class.java)
 
-    lateinit var songList : ArrayList<Song>
+    lateinit var songList: ArrayList<Song>
     var currentIndex = 0
 
     var player = Player()
@@ -31,69 +34,91 @@ class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.apply {
             when (action) {
-                START_SERVICE   -> {
+                Status.Start -> {
                     songList = intent.getParcelableArrayListExtra<Song>(PARAM_SONG_LIST)
                     currentIndex = intent.getIntExtra(PARAM_PLAY_INDEX, 0)
                     startService()
                 }
-                NOTIFY_PREVIOUS -> {
+                Status.Previous -> {
                     prev()
                 }
-                NOTIFY_NEXT     -> {
+                Status.Next -> {
                     next()
                 }
-                NOTIFY_GO_TO_INDEX -> {
+                Status.GoToIndex -> {
                     currentIndex = intent.getIntExtra(PARAM_PLAY_INDEX, 0)
                     goToIndex()
                 }
-                NOTIFY_STOP     -> {
+                Status.Stop -> {
                     stop()
+                }
+                Status.Pause -> {
+                    pause()
+                }
+                Status.Resume -> {
+                    resume()
                 }
             }
         }
         return START_NOT_STICKY
     }
 
-    fun startService(){
+    fun startService() {
+        playerFocusHelper = AudioFocusHelper(this)
+        playerFocusHelper!!.requestAudioFocus()
+
         val song = getSong()
-        startForeground(NOTIFICATION_ID, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink))
+        startForeground(NOTIFICATION_ID, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, true))
 
         play()
     }
 
-    fun next(){
+    fun next() {
         currentIndex++
         fixCurrentIndex()
         play()
     }
 
-    fun play(){
+    fun play() {
         val song = getSong()
         player.play(song)
-        notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink))
+        notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, true))
     }
 
-    fun prev(){
+    fun pause(){
+        player.pause()
+        val song = getSong()
+        notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, false))
+    }
+
+    fun resume(){
+        player.resume()
+        val song = getSong()
+        notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, true))
+    }
+
+    fun prev() {
         currentIndex--
         fixCurrentIndex()
         play()
     }
 
-    fun goToIndex(){
+    fun goToIndex() {
         fixCurrentIndex()
         play()
     }
 
-    fun stop(){
+    fun stop() {
         player.stop()
+        playerFocusHelper?.abandonAudioFocus()
         stopSelf()
     }
 
-    fun getSong() : Song{
+    fun getSong(): Song {
         return songList[currentIndex]
     }
 
-    fun fixCurrentIndex(){
+    fun fixCurrentIndex() {
         currentIndex %= songList.size
         if (currentIndex < 0) currentIndex += songList.size
     }
