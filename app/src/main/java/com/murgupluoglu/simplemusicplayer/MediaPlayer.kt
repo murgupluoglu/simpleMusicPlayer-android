@@ -6,13 +6,12 @@ import android.media.MediaPlayer
 import android.os.Build
 
 
-class Player {
+class MediaPlayer : BasePlayer(){
 
     var isPrepared = false
     var mediaPlayer = MediaPlayer()
 
-
-    fun play(song: Song){
+    override fun play(song: Song){
         mediaPlayer.stop()
         mediaPlayer.reset()
         mediaPlayer.release()
@@ -48,20 +47,20 @@ class Player {
 
     }
 
-    fun stop(){
+    override fun stop(){
         if(isPrepared && mediaPlayer.isPlaying){
             mediaPlayer.stop()
             mediaPlayer.reset()
         }
     }
 
-    fun pause(){
+    override fun pause(){
         if(isPrepared && mediaPlayer.isPlaying){
             mediaPlayer.pause()
         }
     }
 
-    fun resume(){
+    override fun resume(){
         if(isPrepared && !mediaPlayer.isPlaying){
             mediaPlayer.start()
         }

@@ -203,7 +203,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
 
         // Restricts the notification information when the screen is blocked.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setVisibility(Notification.VISIBILITY_PRIVATE)
+            builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         }
         return builder
     }

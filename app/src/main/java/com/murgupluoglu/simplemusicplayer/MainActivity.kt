@@ -14,9 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        songList.add(Song("https://radyo.dogannet.tv/slowturk", "https://i2.cnnturk.com/i/cnnturk/75/0x0/57834bf8f0dc1e53e4fccb9d.jpg", "Slow Türk"))
-        songList.add(Song("https://radyo.dogannet.tv/cnnturk", "https://cdn1.kralmuzik.com.tr/media/content/19-05/17/kralfm.png", "Cnn Turk"))
-        songList.add(Song("https://radyo.dogannet.tv/radyod", "https://pbs.twimg.com/profile_images/1208471733440831492/rXdme36C_400x400.jpg", "Radyo D"))
+        songList.add(Song("https://turkmedya.radyotvonline.com/turkmedya/alemfm.stream/playlist.m3u8", "https://i2.cnnturk.com/i/cnnturk/75/0x0/57834bf8f0dc1e53e4fccb9d.jpg", "Radyo Trafik"))
+        songList.add(Song("https://moondigitalmaster.radyotvonline.net/altinsarkilar/playlist.m3u8", "https://i2.cnnturk.com/i/cnnturk/75/0x0/57834bf8f0dc1e53e4fccb9d.jpg", "Radyo Trafik"))
     }
 
     fun startSong(view : View){
@@ -44,6 +43,14 @@ class MainActivity : AppCompatActivity() {
 
     fun stopSong(view : View){
         sendIntent(Status.Stop)
+    }
+
+    fun pauseSong(view : View){
+        sendIntent(Status.Pause)
+    }
+
+    fun resumeSong(view : View){
+        sendIntent(Status.Resume)
     }
 
     fun sendIntent(action : String){

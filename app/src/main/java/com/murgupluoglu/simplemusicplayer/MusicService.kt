@@ -25,7 +25,7 @@ class MusicService : Service() {
     lateinit var songList: ArrayList<Song>
     var currentIndex = 0
 
-    var player = Player()
+    var player = ExoPlayer(this)
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -35,7 +35,7 @@ class MusicService : Service() {
         intent?.apply {
             when (action) {
                 Status.Start -> {
-                    songList = intent.getParcelableArrayListExtra<Song>(PARAM_SONG_LIST)
+                    songList = intent.getParcelableArrayListExtra(PARAM_SONG_LIST)
                     currentIndex = intent.getIntExtra(PARAM_PLAY_INDEX, 0)
                     startService()
                 }
