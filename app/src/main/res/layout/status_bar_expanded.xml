@@ -12,10 +12,10 @@
         android:layout_height="128dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:scaleType="centerCrop"
         android:padding="5dp"
-        tools:src="@mipmap/ic_launcher"
-        tools:ignore="ContentDescription" />
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription"
+        tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout
         android:id="@+id/buttons"
@@ -106,8 +106,8 @@
             android:fadingEdge="horizontal"
             android:focusable="true"
             android:singleLine="true"
-            tools:text="Song Name"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            tools:text="Song Name" />
 
         <TextView
             android:id="@+id/status_bar_artist_name"
@@ -117,8 +117,8 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:singleLine="true"
-            tools:text="Artist Name"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            tools:text="Artist Name" />
 
         <TextView
             android:id="@+id/status_bar_album_name"
@@ -128,8 +128,8 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:singleLine="true"
-            tools:text="Album Name"
+            android:textColor="@android:color/white"
             android:visibility="gone"
-            android:textColor="@android:color/white" />
+            tools:text="Album Name" />
     </LinearLayout>
 </RelativeLayout>

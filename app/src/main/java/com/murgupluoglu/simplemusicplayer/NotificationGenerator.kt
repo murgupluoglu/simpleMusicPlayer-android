@@ -29,11 +29,11 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
     private val title = "Music Player"
     private val content = "Control Audio"
     private val ticker = "Music Player Playing Now."
-    lateinit var notificationTargetSmall : NotificationTarget
-    lateinit var notificationTargetBig : NotificationTarget
+    lateinit var notificationTargetSmall: NotificationTarget
+    lateinit var notificationTargetBig: NotificationTarget
 
 
-    fun getNotification(context: Context, songTitle: String = "Song Title", artistName: String = "Artist Name", albumName: String = "Album Name", albumLink : String, isPlaying : Boolean = false) : Notification {
+    fun getNotification(context: Context, songTitle: String = "Song Title", artistName: String = "Artist Name", albumName: String = "Album Name", albumLink: String, isPlaying: Boolean = false): Notification {
 
         // Using RemoteViews to bind custom layouts into Notification
         val smallView = RemoteViews(context.packageName, R.layout.status_bar)
@@ -47,10 +47,10 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
 
         // Build the content of the notification
         val nBuilder = getNotificationBuilder(context,
-            title,
-            content,
-            R.mipmap.ic_launcher,
-            ticker)
+                title,
+                content,
+                R.mipmap.ic_launcher,
+                ticker)
 
         // Notification through notification manager
         lateinit var notification: Notification
@@ -65,18 +65,18 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         }
 
         notificationTargetSmall = NotificationTarget(
-            context,
-            R.id.status_bar_icon,
-            smallView,
-            notification,
-            NOTIFICATION_ID
+                context,
+                R.id.status_bar_icon,
+                smallView,
+                notification,
+                NOTIFICATION_ID
         )
         notificationTargetBig = NotificationTarget(
-            context,
-            R.id.status_bar_album_art,
-            bigView,
-            notification,
-            NOTIFICATION_ID
+                context,
+                R.id.status_bar_album_art,
+                bigView,
+                notification,
+                NOTIFICATION_ID
         )
 
         loadArtistImage(context, albumLink)
@@ -87,22 +87,22 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         return notification
     }
 
-    private fun loadArtistImage(context: Context, artistLink : String){
+    private fun loadArtistImage(context: Context, artistLink: String) {
         val options = RequestOptions()
-           // transforms(CenterCrop(), RoundedCorners(32))
-            .error(R.mipmap.ic_launcher)
+                // transforms(CenterCrop(), RoundedCorners(32))
+                .error(R.mipmap.ic_launcher)
 
         Glide.with(context)
-            .asBitmap()
-            .load(artistLink)
-            .apply(options)
-            .into(notificationTargetSmall)
+                .asBitmap()
+                .load(artistLink)
+                .apply(options)
+                .into(notificationTargetSmall)
 
         Glide.with(context)
-            .asBitmap()
-            .load(artistLink)
-            .apply(options)
-            .into(notificationTargetBig)
+                .asBitmap()
+                .load(artistLink)
+                .apply(options)
+                .into(notificationTargetBig)
     }
 
     fun cancelNotification(context: Context) {
@@ -110,7 +110,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         notificationManager.cancel(NOTIFICATION_ID)
     }
 
-    fun updateNotification(context: Context, notification : Notification) {
+    fun updateNotification(context: Context, notification: Notification) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
@@ -128,13 +128,13 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         smallView.setOnClickPendingIntent(R.id.status_bar_next, createPendingIntent(context, Status.Next))
 
 
-        if(isPlaying){
+        if (isPlaying) {
             bigView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_pause)
             smallView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_pause)
 
             bigView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, Status.Pause))
             smallView.setOnClickPendingIntent(R.id.status_bar_play, createPendingIntent(context, Status.Pause))
-        }else{
+        } else {
             bigView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_play)
             smallView.setInt(R.id.status_bar_play, "setImageResource", R.drawable.ic_play)
 
@@ -193,13 +193,13 @@ class NotificationGenerator(var notificationIntentClass: Class<*>) {
         }
         // Build the content of the notification
         builder.setContentTitle(notificationTitle)
-            .setContentText(notificationText)
-            .setSmallIcon(notificationIconId)
-            .setLargeIcon(BitmapFactory.decodeResource(context.resources, notificationIconId))
-            .setOngoing(true)
-            .setContentIntent(pendingIntent)
-            .setTicker(notificationTicker)
-            .setOnlyAlertOnce(true)
+                .setContentText(notificationText)
+                .setSmallIcon(notificationIconId)
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, notificationIconId))
+                .setOngoing(true)
+                .setContentIntent(pendingIntent)
+                .setTicker(notificationTicker)
+                .setOnlyAlertOnce(true)
 
         // Restricts the notification information when the screen is blocked.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

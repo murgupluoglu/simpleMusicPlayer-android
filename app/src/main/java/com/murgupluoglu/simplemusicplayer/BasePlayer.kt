@@ -7,7 +7,7 @@ package com.murgupluoglu.simplemusicplayer
 
 abstract class BasePlayer {
 
-    abstract fun play(song : Song)
+    abstract fun play(song: Song)
     abstract fun pause()
     abstract fun stop()
     abstract fun resume()

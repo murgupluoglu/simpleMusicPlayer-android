@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
-object Status{
+object Status {
     const val Pause = "NOTIFY_PAUSE"
     const val Resume = "NOTIFY_RESUME"
     const val Stop = "NOTIFY_STOP"
@@ -85,13 +85,13 @@ class MusicService : Service() {
         notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, true))
     }
 
-    fun pause(){
+    fun pause() {
         player.pause()
         val song = getSong()
         notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, false))
     }
 
-    fun resume(){
+    fun resume() {
         player.resume()
         val song = getSong()
         notificationGenerator.updateNotification(this, notificationGenerator.getNotification(this, song.title, "", "", song.imageLink, true))

@@ -10,7 +10,7 @@ import android.os.Handler
 import android.util.Log
 import androidx.core.content.ContextCompat
 
-class AudioFocusHelper(var context: Context) : AudioManager.OnAudioFocusChangeListener{
+class AudioFocusHelper(var context: Context) : AudioManager.OnAudioFocusChangeListener {
 
     private lateinit var mFocusRequest: AudioFocusRequest
     var audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -28,7 +28,7 @@ class AudioFocusHelper(var context: Context) : AudioManager.OnAudioFocusChangeLi
                 })
 
                 setAcceptsDelayedFocusGain(false)
-                setOnAudioFocusChangeListener({ focusChange -> onAudioFocusChange(focusChange)}, Handler())
+                setOnAudioFocusChangeListener({ focusChange -> onAudioFocusChange(focusChange) }, Handler())
                 build()
             }
 
@@ -62,7 +62,7 @@ class AudioFocusHelper(var context: Context) : AudioManager.OnAudioFocusChangeLi
         }
     }
 
-    fun sendIntent(action : String){
+    fun sendIntent(action: String) {
         val serviceIntent = Intent(context, MusicService::class.java)
         serviceIntent.action = action
         ContextCompat.startForegroundService(context, serviceIntent)

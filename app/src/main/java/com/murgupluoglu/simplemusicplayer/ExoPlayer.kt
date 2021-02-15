@@ -21,7 +21,10 @@ class ExoPlayer(val context: Context) : BasePlayer() {
 
     override fun play(song: Song) {
         with(exoPlayer) {
-            prepare(buildHlsMediaSource(song.streamLink), true, true)
+            prepare(buildHlsMediaSource(song.streamLink),
+                    true,
+                    true
+            )
             playWhenReady = true
         }
     }
