@@ -2,6 +2,7 @@ package com.murgupluoglu.simplemusicplayer
 
 import android.content.Context
 import android.net.Uri
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
@@ -47,8 +48,9 @@ class ExoPlayer(val context: Context) : BasePlayer() {
     private fun buildHlsMediaSource(url: String): MediaSource {
         val mediaDataSourceFactory =
                 DefaultDataSourceFactory(context, Util.getUserAgent(context, "mediaPlayerSample"))
+        val mediaItem =  MediaItem.fromUri(Uri.parse(url))
         val mediaSource = HlsMediaSource.Factory(mediaDataSourceFactory)
-                .createMediaSource(Uri.parse(url))
+                .createMediaSource(mediaItem)
         return mediaSource
     }
 }
