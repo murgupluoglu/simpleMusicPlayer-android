@@ -1,4 +1,4 @@
-package com.murgupluoglu.simplemusicplayer
+package com.murgupluoglu.simplemusicplayer.player
 
 /*
 *  Created by Mustafa Ürgüplüoğlu on 11.02.2021.

@@ -1,4 +1,4 @@
-package com.murgupluoglu.simplemusicplayer
+package com.murgupluoglu.simplemusicplayer.player
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.NotificationTarget
+import com.murgupluoglu.simplemusicplayer.R
 
 
 const val NOTIFICATION_ID = 99

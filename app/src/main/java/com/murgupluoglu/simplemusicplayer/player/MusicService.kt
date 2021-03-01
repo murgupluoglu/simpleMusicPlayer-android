@@ -1,8 +1,9 @@
-package com.murgupluoglu.simplemusicplayer
+package com.murgupluoglu.simplemusicplayer.player
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.murgupluoglu.simplemusicplayer.MainActivity
 
 object Status {
     const val Pause = "NOTIFY_PAUSE"

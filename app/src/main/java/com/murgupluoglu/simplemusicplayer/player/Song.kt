@@ -1,4 +1,4 @@
-package com.murgupluoglu.simplemusicplayer
+package com.murgupluoglu.simplemusicplayer.player
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

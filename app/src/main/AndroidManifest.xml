@@ -23,7 +23,7 @@
         </activity>
 
         <service
-            android:name=".MusicService"
+            android:name=".player.MusicService"
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="false" />

@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.murgupluoglu.simplemusicplayer.player.*
 
 class MainActivity : AppCompatActivity() {
 
-    val songList = arrayListOf<Song>()
+    private val songList = arrayListOf<Song>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

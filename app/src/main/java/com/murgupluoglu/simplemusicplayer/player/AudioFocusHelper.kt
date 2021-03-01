@@ -1,4 +1,4 @@
-package com.murgupluoglu.simplemusicplayer
+package com.murgupluoglu.simplemusicplayer.player
 
 import android.content.Context
 import android.content.Intent

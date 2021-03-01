@@ -1,4 +1,4 @@
-package com.murgupluoglu.simplemusicplayer
+package com.murgupluoglu.simplemusicplayer.player
 
 import android.content.Context
 import android.net.Uri
@@ -22,10 +22,10 @@ class ExoPlayer(val context: Context) : BasePlayer() {
 
     override fun play(song: Song) {
         with(exoPlayer) {
-            prepare(buildHlsMediaSource(song.streamLink),
-                    true,
+            setMediaSource(buildHlsMediaSource(song.streamLink),
                     true
             )
+            prepare()
             playWhenReady = true
         }
     }
@@ -48,7 +48,7 @@ class ExoPlayer(val context: Context) : BasePlayer() {
     private fun buildHlsMediaSource(url: String): MediaSource {
         val mediaDataSourceFactory =
                 DefaultDataSourceFactory(context, Util.getUserAgent(context, "mediaPlayerSample"))
-        val mediaItem =  MediaItem.fromUri(Uri.parse(url))
+        val mediaItem = MediaItem.fromUri(Uri.parse(url))
         val mediaSource = HlsMediaSource.Factory(mediaDataSourceFactory)
                 .createMediaSource(mediaItem)
         return mediaSource
