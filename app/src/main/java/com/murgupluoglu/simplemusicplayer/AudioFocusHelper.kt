@@ -15,6 +15,7 @@ class AudioFocusHelper(var context: Context) : AudioManager.OnAudioFocusChangeLi
     private lateinit var mFocusRequest: AudioFocusRequest
     var audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
+    @Suppress("DEPRECATION")
     fun requestAudioFocus(): Boolean {
 
         val result: Int
@@ -40,6 +41,7 @@ class AudioFocusHelper(var context: Context) : AudioManager.OnAudioFocusChangeLi
         return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 
+    @Suppress("DEPRECATION")
     fun abandonAudioFocus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             audioManager.abandonAudioFocusRequest(mFocusRequest)

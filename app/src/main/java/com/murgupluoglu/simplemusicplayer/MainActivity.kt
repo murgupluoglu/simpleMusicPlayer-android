@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         songList.add(Song("https://turkmedya.radyotvonline.com/turkmedya/alemfm.stream/playlist.m3u8", "https://i2.cnnturk.com/i/cnnturk/75/0x0/57834bf8f0dc1e53e4fccb9d.jpg", "Alem FM"))
         songList.add(Song("https://moondigitalmaster.radyotvonline.net/altinsarkilar/playlist.m3u8", "https://i2.cnnturk.com/i/cnnturk/75/0x0/57834bf8f0dc1e53e4fccb9d.jpg", "Altın Şarkılar"))
+        songList.add(Song("https://ssl4.radyotvonline.com/radyohome/radyotrafikhome.stream_aac/playlist.m3u8", "https://i2.cnnturk.com/i/cnnturk/75/0x0/57834bf8f0dc1e53e4fccb9d.jpg", "Radyo Trafik"))
     }
 
     fun startSong(view: View) {
